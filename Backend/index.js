@@ -9,7 +9,6 @@ const http = require("http");
 const { Server } = require("socket.io")
 
 const cors = require('cors');
-//const server = require('http').createServer(app);
 const sessionMiddleware = require('socket.io-session');
 const session = require('express-session')
 const bcrypt = require('bcrypt');
@@ -102,7 +101,6 @@ io.on("connection", (socket) => {
 });
 
 
-
 app.get('/getAllUsers', (req, res) => {
   queries.getAllUsers()
   .then(users => res.status(200).json(users))
@@ -116,8 +114,6 @@ app.get('/getFinishedTasks', queries.getFinishedTasks)
 
 app.get('/getActiveHistory', queries.getActiveHistory)
 app.get('/getFinishedHistory', queries.getFinishedHistory)
-
-
 
 
 server.listen(port, () => {
