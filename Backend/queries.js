@@ -83,33 +83,6 @@ const activateUser = (request, response) => {
 //** ADMIN TASKS */
 
 
-/* function getActiveTasks(){
-    const query = `
-    SELECT task_id, task_requester, task_to, task_priority, task_description, 
-    task_finaltimedate, task_status, task_filelink, 
-    task_email, task_show, task_creation_time, task_finished_date_time
-    FROM public.tasks	
-    WHERE task_show = 1
-    ORDER BY task_finaltimedate ASC`;
-    return pool.query(query)
-        .then(res => res.rows)
-        .catch(err => { throw err })
-} */
-
-/* function getFinishedTasks(){
-    const query = `
-    SELECT task_id, task_requester, task_to, task_priority, task_description, 
-    task_finaltimedate, task_status, task_filelink, 
-    task_email, task_show, task_creation_time, task_finished_date_time
-    FROM public.tasks	
-    WHERE task_show = 0
-    ORDER BY task_finaltimedate ASC`;
-    return pool.query(query)
-        .then(res => res.rows)
-        .catch(err => { throw err })
-} */
-
-
 function getHistoryTasks(){
     const query = `
     SELECT history_id, history_task_id, history_user_id, history_date_time, task_requester, task_to, task_priority, task_description, task_finaltimedate, task_status, task_filelink, task_email, task_show
@@ -118,16 +91,12 @@ function getHistoryTasks(){
         .then(res => res.rows)
         .catch(err => { throw err })
 }
-
-
-
 ///////////  INSERT UPDATE    ////////////
 
 
 function insertNewTask(taskX) {
     const jsonString = taskX
     const task = JSON.parse(jsonString);
-
     const values = [
         task.requester,
         task.taskTo,
@@ -140,7 +109,6 @@ function insertNewTask(taskX) {
         task.show,
         task.creationDateTime
       ]
-
     const query = `INSERT INTO public.tasks (task_requester, task_to, task_priority, task_description, task_finaltimedate, task_status, task_filelink, task_email, task_show, task_creation_time)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING task_id`;
     return pool.query(query, values)
@@ -175,24 +143,10 @@ function insertNewTask(taskX) {
 			  ]
 			return pool.query(queryHis, valuesHis)
 				.then(res => res.rows[0])
-				.catch(err => { throw err });
-				
+				.catch(err => { throw err });				
 		})
         .catch(err => { throw err });
 }
-
-///////  DELETE TASK /////
-
-
-/* function destroyTask(task_id){
-    const query = `DELETE FROM public.tasks
-    WHERE task_id = $1`;
-    return pool.query(query,[task_id])
-        .then(res => res.rows)
-        .catch(err => {throw err})
-}
- */
-
 
 const findUser = async (username) => {
     const query = `SELECT user_id, user_name, user_password, user_active, user_acctype FROM public.users WHERE user_name = '${username}'`;
@@ -317,14 +271,6 @@ const createNewTask = (request, response) => {
         });
     });
 };
-
-
-//////////////////////////////////////////////////
-//////////////////  EVERYONE  ////////////////////
-//////////////////////////////////////////////////
-////////////////////  GET  ///////////////////////
-//////////////////////////////////////////////////
-
 const getActiveTasks = (request, response) => {
     const query = `
     SELECT 
@@ -352,6 +298,7 @@ const getActiveTasks = (request, response) => {
         response.status(200).json(results.rows);
     });
 }
+
 
 const getFinishedTasks = (request, response) => {
     const query = `
@@ -381,11 +328,6 @@ const getFinishedTasks = (request, response) => {
     });
 }
 
-//////////////////////////////////////////////////
-/////////////  ShiftLeaders / admin  /////////////
-//////////////////////////////////////////////////
-////////////////  Update task  ///////////////////
-//////////////////////////////////////////////////
 
 const updateTask = (request, response) => {
     const user = request.body.updatedUser
@@ -397,8 +339,6 @@ const updateTask = (request, response) => {
     const date = new Date();
     date.setHours(date.getHours() + 1);
     const utcPlusOneDate = date.toISOString();
-
-
     const query = `
     SELECT 
         task_id, 
@@ -421,7 +361,6 @@ const updateTask = (request, response) => {
         if (error) {
             throw error;
         }
-
         old_task = results.rows[0];
         const queryHistory = `
         INSERT INTO public.history(
@@ -464,7 +403,6 @@ const updateTask = (request, response) => {
             SET  task_to=$2, task_finaltimedate=$3, task_comment=$4
             WHERE task_id=$1;
             `
-
             pool.query(queryUpdateActiveTask, [task_id, task_to, task_finaltimedate, task_commentF], (error, results) => {
                 if (error) {
                     throw error;
@@ -481,15 +419,13 @@ const finishTask = (request, response) => {
     date.setHours(date.getHours() + 1);
     const utcPlusOneDate = date.toISOString();
     const finishedComment = 'finish btn clicked'
-
     console.log(request.body)
     const task_id = request.body.task_id 
     const user = request.body.updatedUser
     const finishTaskQuery = `
     UPDATE public.tasks
             SET  task_show=0, task_finished_date_time=$2
-            WHERE task_id=$1;
-            
+            WHERE task_id=$1;    
     `
     pool.query(finishTaskQuery, [task_id, utcPlusOneDate], (error, results) => {
         if (error) {
@@ -575,7 +511,6 @@ const finishTask = (request, response) => {
 }
 
 
-
 const getActiveHistory = (request, response) => {
     const query = `
 SELECT history_id, history_task_id, history_user_id, history_date_time, task_requester, task_to, task_priority, task_description, task_finaltimedate, task_status, task_filelink, task_email, task_show, task_comment
@@ -590,6 +525,7 @@ pool.query(query, [], (error, results) => {
 });
 }
 
+
 const getFinishedHistory = (request, response) => {
     const query = `
 SELECT history_id, history_task_id, history_user_id, history_date_time, task_requester, task_to, task_priority, task_description, task_finaltimedate, task_status, task_filelink, task_email, task_show, task_comment
@@ -603,11 +539,6 @@ pool.query(query, [], (error, results) => {
 });
 }
 
-//////////////////////////////////////////////////
-/////////////  ShiftLeaders / admin  /////////////
-//////////////////////////////////////////////////
-///////////////  destroy task  ///////////////////
-//////////////////////////////////////////////////
 
 const destroyTask = (request, response) => {
     const task_id = request.body.task_id
@@ -620,6 +551,7 @@ const destroyTask = (request, response) => {
         response.status(200).json();
     });
 }
+
 
 const reOpenTask = (request, response) => {
     const task_id = request.body.task_id
@@ -634,6 +566,7 @@ const reOpenTask = (request, response) => {
         response.status(200).json();
     });
 }
+
 
 const changeOptions = (request, response) => {
     const updatedFilter = request.body.filter;
