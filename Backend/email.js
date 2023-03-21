@@ -5,6 +5,7 @@ const { parseISO, format } = require('date-fns');
 const { utcToZonedTime } = require('date-fns-tz');
 
 const sendFinishEmail = (array) => {
+    const smtpIp = xxx;
     
     const task_id = array[0];
     const user = array[1];
@@ -28,7 +29,7 @@ const sendFinishEmail = (array) => {
     const formattedDate = day + ' ' + month + ' ' + year + ' - ' + hour +':' + minute
     let newEmails = task_email.split(";").map(email => email.trim()).join("; "); // split the string by ';' and remove any whitespace around each email, then join the emails with '; ' to ensure there's a space after each email
 
-    exec(`powershell -Command "Send-MailMessage -SMTPServer 172.20.170.37 -To '${newEmails}' -From scm-requests@webasto.com -Subject 'Request of id: ${task_id}' -Body 'This is automatically generated email. Task number: ${task_id} has been marked as solved by user: ${user} , with ${timeStampS} last timestamp: ${formattedDate}'"`, (err, stdout, stderr) => {
+    exec(`powershell -Command "Send-MailMessage -SMTPServer smtpIp -To '${newEmails}' -From scm-requests@xxx.com -Subject 'Request of id: ${task_id}' -Body 'This is automatically generated email. Task number: ${task_id} has been marked as solved by user: ${user} , with ${timeStampS} last timestamp: ${formattedDate}'"`, (err, stdout, stderr) => {
         if (err) {
           console.error(err);
           return;
