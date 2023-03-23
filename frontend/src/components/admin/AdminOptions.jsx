@@ -18,10 +18,7 @@ const ipPort = process.env.REACT_APP_IP_PORT;
 const filterArray = variables.filter;
 
 
-
-
 function ChangeVariables(){
-    
     const { status, error, mutate } = useMutation({
       mutationFn: (inputs) => {
         return fetch(`http://${IP}:${ipPort}/changeOptions`, {
@@ -48,15 +45,12 @@ function ChangeVariables(){
         text: "Failed to change filter",
         }),
     });
-  
     const changeVariables = () => {
       Swal.fire({
         width: 800,
         title: `Do you really want to change filter`,
         html: ` 
-  
-        `,
-       
+        `,   
      showCancelButton: true,
      confirmButtonText: "Confirm",
      cancelButtonText: "Cancel",      
@@ -71,8 +65,7 @@ function ChangeVariables(){
         const newFilterValue = document.getElementById('new').value;
         if (newFilterValue !== ''){
             inputValues.push(newFilterValue);
-        }
-        
+        } 
         await mutate(inputValues);
       },
     });
@@ -82,14 +75,9 @@ function ChangeVariables(){
   ) 
   }
 
-
-
-
+  
 function AdminOptions() {
     const socket = useSocket();
-
-
-
     useEffect(() => {
         if (socket) {
             // refetch from outside update
@@ -100,26 +88,20 @@ function AdminOptions() {
         }
       }, [socket]);
 
-
-
       return(
         <div className="bg-white w-full h-full flex flex-col items-center">
             <div className="bg-white mt-5 pt-5 pb-20 pr-5 w-11/12 rounded-3xl">
-  
                 <div className="pt-5 pb-5">
                     <h1 className="text-2xl font-serif underline underline-offset-4">Options</h1>
                 </div>
-
                 <div className="bg-white mb-5 mt-2 pt-5 pb-5 pl-10 flex justify-start items-center">
                     <div className="flex flex-col my-2 mr-5">
                         {filterArray.map((val, index) => (
-                        <input type="text" id={index} className="border-spacing-1 border rounded-2xl p-2 my-2" key={index} defaultValue={val}></input>
-                        
+                        <input type="text" id={index} className="border-spacing-1 border rounded-2xl p-2 my-2" key={index} defaultValue={val}></input>         
                         ))}
                         <input type="text" id='new' className="border-spacing-1 border rounded-2xl p-2 my-2" key='' defaultValue=''></input>
                     </div>
                 </div>
-
                 <div className="">
                     <div className="">
                         <ChangeVariables />
@@ -129,7 +111,6 @@ function AdminOptions() {
         </div>
         )
     }
+
     
-    
-        
     export default AdminOptions;
