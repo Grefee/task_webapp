@@ -18,12 +18,14 @@ const IP = process.env.REACT_APP_IP_ADD;
 const ipPort = process.env.REACT_APP_IP_PORT;
 const filterArray = variables.filter
 
+
 async function fetchActiveTasks(IP){
     const response = await fetch(`http://${IP}:${ipPort}/getActiveTasks`, {
         method: 'GET',
         });
         return response.json();
   }
+
 
 async function fetchFinishedTasks(IP){
     const response = await fetch(`http://${IP}:${ipPort}/getFinishedTasks`, {
@@ -39,6 +41,8 @@ async function fetchActiveHistory(IP) {
         });
         return response.json();
   }
+
+
 async function fetchFinishedHistory(IP) {
 const response = await fetch(`http://${IP}:${ipPort}/getFinishedHistory`, {
     method: 'GET',
@@ -46,8 +50,8 @@ const response = await fetch(`http://${IP}:${ipPort}/getFinishedHistory`, {
     return response.json();
 }
 
+
 function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATasksHistory, refetchFTasksHistory}){
-  
     const { status, error, mutate } = useMutation({
       mutationFn: ({id,user, updatedTask_to, updatedTask_finaltimedate, updatedTask_comment}) => {
         return fetch(`http://${IP}:${ipPort}/updateTask`, {
@@ -82,9 +86,7 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
         text: "Failed to change task",
         }),
     });
-  
-  
-  
+ 
       const updateBtn = () => {
           Swal.fire({
               width: 1000,
@@ -95,7 +97,6 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
                   <label for="requester" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Requester: </label>
                   <input id="requester" type="text" value="${item.task_requester}" class="swal2-input" style="background-color: rgb(226 232 240)" readonly>
                 </div>
-  
                 <div style="display: flex; align-items: center;">
                 <label for="taskTo" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Task To: </label>
                 <select name="taskTo" id="taskTo" class="swal2-select" required>
@@ -105,38 +106,30 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
                   ))}
                 </select>
               </div>
-  
                 <div style="display: flex; align-items: center;">
                   <label for="task_description" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Description: </label>
                   <textarea id="task_description" class="swal2-textarea" style="width:600px; background-color: rgb(226 232 240)" readonly>${item.task_description}</textarea>
                 </div>
-  
                 <div style="display: flex; align-items: center;">
                   <label for="date" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Date: </label>
                   <input type="date" value="${format(new Date(item.task_finaltimedate), 'yyyy-MM-dd')}" id="date" class="swal2-date">
-  
                   <label for="time" style="display: inline-block; margin-right: 10px; margin-left: 10px; font-size: 24px; text-decoration: underline;">Time: </label>
                   <input type="time" value="${format(new Date(item.task_finaltimedate), 'HH:mm')}" id="time" class="swal2-time">
-  
                 </div>
-            
                 <div style="display: flex; align-items: center;">
                   <label for="task_comment" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Comment: </label>
                   <textarea id="task_comment" class="swal2-textarea" style="width:600px">${item.task_comment}</textarea>
                 </div>
-            
                 <div style="display: flex; align-items: center;">
                   <label for="task_filelink" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">File Link: </label>
                   <textarea id="task_filelink" class="swal2-textarea" style="width:600px; background-color: rgb(226 232 240)" readonly>${item.task_filelink}</textarea>
                 </div>
-            
                 <div style="display: flex; align-items: center;">
                   <label for="task_email" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Email: </label>
                   <textarea id="task_email" class="swal2-textarea" style="width:600px; background-color: rgb(226 232 240)" readonly>${item.task_email}</textarea>
                 </div>
               </div>  
               `,
-             
            showCancelButton: true,
            confirmButtonText: "Confirm",
            cancelButtonText: "Cancel",      
@@ -147,13 +140,10 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
               let time = document.getElementById('time').value
               let date = document.getElementById('date').value
               let updatedTask_finaltimedate =  format(new Date(date + ' ' + time), 'yyyy-MM-dd HH:mm:ss')
-  
               let updatedTask_comment = document.getElementById('task_comment').value;
+               
               await mutate({id, user, updatedTask_to, updatedTask_finaltimedate, updatedTask_comment});
-  
            },
-  
-  
     });
        };
       return(
@@ -161,8 +151,8 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
       ) 
   }
   
-  function FinishBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATasksHistory, refetchFTasksHistory}){
-    
+  
+  function FinishBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATasksHistory, refetchFTasksHistory}){ 
     const { status, error, mutate } = useMutation({
       mutationFn: ({id, user}) => {
         return fetch(`http://${IP}:${ipPort}/finishTask`, {
@@ -200,9 +190,7 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
         width: 800,
         title: `Do you really want to finish task: ${item.task_id}`,
         html: ` 
-  
         `,
-       
      showCancelButton: true,
      confirmButtonText: "Confirm",
      cancelButtonText: "Cancel",      
@@ -210,19 +198,16 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
         let id = item.task_id
         let user = sessionStorage.getItem('user_name')
         await mutate({id, user});
-  
      },
-  
-  
   });
   };
     return(
       <button className="button-28" onClick={() => finishBtn(item.task_id)}>finish</button>
-  ) 
+    ) 
   }
 
+  
   function ReOpenbBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATasksHistory, refetchFTasksHistory}){
-    
     const { status, error, mutate } = useMutation({
       mutationFn: ({id}) => {
         return fetch(`http://${IP}:${ipPort}/reOpenTask`, {
@@ -253,33 +238,29 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
         text: "Failed to reopen task",
         }),
     });
-  
     const reopenBtn = () => {
       Swal.fire({
         width: 800,
         title: `Do you really want to reopen task: ${item.task_id}`,
         html: ` 
-  
         `,
-       
      showCancelButton: true,
      confirmButtonText: "Confirm",
      cancelButtonText: "Cancel",      
      preConfirm: async () => {
       let id = item.task_id
         await mutate({id});
-  
      },
-  
-  
   });
   };
+      
     return(
       <button className="button-28 max-w-fit" onClick={() => reopenBtn(item.task_id)}>ReOpen</button>
-  ) 
+    ) 
   }
+  
+  
   function Destroybtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATasksHistory, refetchFTasksHistory}){
-    
     const { status, error, mutate } = useMutation({
       mutationFn: ({id}) => {
         return fetch(`http://${IP}:${ipPort}/destroyTask`, {
@@ -310,38 +291,28 @@ function UpdatebBtn({item, refetchActiveTasks, refetchFinishedTasks, refetchATas
         text: "Failed to destroy task",
         }),
     });
-  
     const destroyBtn = () => {
       Swal.fire({
         width: 800,
         title: `Do you really want to destroy task: ${item.task_id}`,
         html: ` 
-  
         `,
-       
      showCancelButton: true,
      confirmButtonText: "Confirm",
      cancelButtonText: "Cancel",      
      preConfirm: async () => {
-  
         await mutate(item.task_id);
-  
      },
-  
-  
   });
   };
+      
     return(
       <button className="button-28 max-w-fit" onClick={() => destroyBtn(item.task_id)}>Destroy</button>
-  ) 
+     ) 
   }
 
 
-
-
-
-
-
+  
 function AdminTasks() {
     const socket = useSocket();
     const [expandedTasks, setExpandedTasks] = useState([]);
@@ -378,9 +349,7 @@ function AdminTasks() {
       setFilterRequester(filterRequester.filter(val => val !== value));
     }
 
-
-
-
+    
     function showHistory(task_id) {
       if (expandedTasks.includes(task_id)) {
         setExpandedTasks(expandedTasks.filter(taskId => taskId !== task_id));
@@ -388,8 +357,6 @@ function AdminTasks() {
         setExpandedTasks([...expandedTasks, task_id]);
       }
     };
-
-
 
     useEffect(() => {
       if (socket) {
@@ -413,10 +380,8 @@ function AdminTasks() {
 
 
 return(
-
     <div className="bg-white w-full h-full flex flex-col items-center">
       <div className="bg-white mt-5 pt-5 pb-20 pr-5 w-11/12 rounded-3xl">
-
         <div className="pt-5 pb-5">
           <h1 className="text-2xl font-serif underline underline-offset-4">Aktivní tasky</h1>
         </div>
@@ -430,7 +395,6 @@ return(
               ))}
             </select> 
           </div>
-
           <div className="">
             <div className="">
               <label>Selected filters: </label>
@@ -542,7 +506,6 @@ return(
                           <td className="px-2 py-2"><UpdatebBtn item={item} refetchActiveTasks={refetchActiveTasks} refetchFinishedTasks={refetchFinishedTasks} refetchATasksHistory={refetchATasksHistory} refetchFTasksHistory={refetchFTasksHistory} /></td>
                           <td className="px-2"><FinishBtn item={item} refetchActiveTasks={refetchActiveTasks} refetchFinishedTasks={refetchFinishedTasks} refetchATasksHistory={refetchATasksHistory} refetchFTasksHistory={refetchFTasksHistory} /></td>
                       </tr>
-                       
                        {expandedTasks.includes(item.task_id) && (
                         <tr>
                           <td colSpan="10">
@@ -553,7 +516,6 @@ return(
                                     <th colSpan="2" className="py-4">History tasks for: {item.task_id}</th>
                                   </tr>
                                   <tr>
-                                    
                                     <th className="p-2">Change made</th>
                                     <th className="p-2">Requester</th>
                                     <th className="p-2">By</th>
@@ -563,7 +525,6 @@ return(
                                     <th className="p-2">Comment</th>
                                     <th className="p-2">File Link</th>
                                     <th className="p-2">Email</th>
-                                  
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -575,7 +536,6 @@ return(
                                     .map((historyTask) => {
                                       return (
                                         <tr key={historyTask.history_id}>
-                                          
                                           <td className="p-2  pl-5 border-b border-slate-300 w-32 text-center">{format(new Date(historyTask.history_date_time), 'd. M. HH:mm')}</td>
                                           <td className="p-2 border-b border-slate-300 text-center">{historyTask.task_requester}</td>
                                           <td className="p-2 border-b border-slate-300 text-center">{historyTask.history_user_id}</td>
@@ -597,7 +557,6 @@ return(
                     </React.Fragment>
                   );
                 })
-
                   // ALL DATA
               : activeTasks.map((item) => {
                   return(                  
@@ -616,21 +575,11 @@ return(
                       <td className="p-2 border-b border-slate-300 max-w-250px">{item.task_comment}</td>
                       <td className="p-2 border-b border-slate-300 max-w-250px">{item.task_filelink}</td>
                       <td className="p-2 border-b border-slate-300 max-w-250px">{item.task_email}</td>
-  
                       <td className="px-6 py-3"><UpdatebBtn item={item} /></td>
                       <td className="px-6 py-3"><button className="button-28">finish</button></td>
                   </tr>
-
-
-
-
-
-
-
-
                   )})     
               }
-              
               { // filter is but no data
                 (filter.length > 0 || filterId.length > 0 || filterRequester.length > 0) && 
                   activeTasks.filter((task) => {
@@ -647,12 +596,10 @@ return(
               </tbody>
             </table>
           </div>              
-
       {/** FINISHED TASKS */}
         <div className="pt-5 pb-5">
           <h1 className="text-2xl font-serif underline underline-offset-4">Uzavřené tasky</h1>
         </div>
-        
           <div className=" relative border w-full rounded-3xl overflow-hidden">
             <table className="w-full text-black-500 dark:text-gray-400 overflow-hidden ">
               <thead>
@@ -698,7 +645,6 @@ return(
                           <td className="px-2 py-2"><ReOpenbBtn item={item} refetchActiveTasks={refetchActiveTasks} refetchFinishedTasks={refetchFinishedTasks} refetchATasksHistory={refetchATasksHistory} refetchFTasksHistory={refetchFTasksHistory} /></td>
                           <td className="px-2"><Destroybtn item={item} refetchActiveTasks={refetchActiveTasks} refetchFinishedTasks={refetchFinishedTasks} refetchATasksHistory={refetchATasksHistory} refetchFTasksHistory={refetchFTasksHistory} /></td>
                       </tr>
-                       
                        {expandedTasks.includes(item.task_id) && (
                         <tr>
                           <td colSpan="10">
@@ -709,7 +655,6 @@ return(
                                     <th colSpan="2" className="py-2">History tasks for: {item.task_id}</th>
                                   </tr>
                                   <tr>
-                                    
                                     <th className="p-2">Change made</th>
                                     <th className="p-2">Requester</th>
                                     <th className="p-2">By</th>
@@ -719,7 +664,6 @@ return(
                                     <th className="p-2">Comment</th>
                                     <th className="p-2">File Link</th>
                                     <th className="p-2">Email</th>
-                                  
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -731,7 +675,6 @@ return(
                                     .map((historyTask) => {
                                       return (
                                         <tr key={historyTask.history_id}>
-                                          
                                           <td className="p-2  pl-5 border-b border-slate-300 w-32 text-center">{format(new Date(historyTask.history_date_time), 'd. M. HH:mm')}</td>
                                           <td className="p-2 border-b border-slate-300 text-center">{historyTask.task_requester}</td>
                                           <td className="p-2 border-b border-slate-300 text-center">{historyTask.history_user_id}</td>
@@ -753,7 +696,6 @@ return(
                     </React.Fragment>
                   );
                 })
-
                   // ALL DATA
               : finishedTasks.map((item) => {
                   return(                  
@@ -763,7 +705,7 @@ return(
                     : new Date() > new Date(item.task_finaltimedate)
                         ? 'bg-red-300'
                         : 'bg-white'
-                }`}>
+                        }`}>
                       <td className="p-2 pl-5 border-b border-slate-300">{item.task_id}</td>
                       <td className="p-2 border-b border-slate-300">{item.task_requester}</td>
                       <td className="p-2 border-b border-slate-300">{item.task_to}</td>
@@ -772,21 +714,11 @@ return(
                       <td className="p-2 border-b border-slate-300 max-w-250px">{item.task_comment}</td>
                       <td className="p-2 border-b border-slate-300 max-w-250px">{item.task_filelink}</td>
                       <td className="p-2 border-b border-slate-300 max-w-250px">{item.task_email}</td>
-  
                       <td className="px-6 py-3"><UpdatebBtn item={item} /></td>
                       <td className="px-6 py-3"><button className="button-28">finish</button></td>
                   </tr>
-
-
-
-
-
-
-
-
                   )})     
               }
-              
               { // filter is but no data
                 (filter.length > 0 || filterId.length > 0 || filterRequester.length > 0) && 
                   !finishedTasks.some(task => {
@@ -797,18 +729,16 @@ return(
                     ); 
                   }) && 
                   <tr className={` border-b  hover:bg-slate-200`}>
-                          <td className="px-3 py-3 text-center" colSpan="10">no data found</td>
-                      </tr>
+                      <td className="px-3 py-3 text-center" colSpan="10">no data found</td>
+                  </tr>
               }
               </tbody>
             </table>
           </div>          
         </div>
-
       </div>   
     )
 }
 
 
-    
 export default AdminTasks;
