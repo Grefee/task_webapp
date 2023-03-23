@@ -26,13 +26,11 @@ function Logout() {
       sessionStorage.setItem('acc_type', '');
       sessionStorage.setItem('user_name', '');
       navigate('/');
-      
   }
   return (
       <button className="button-28 max-w-fit" onClick={() => logout()}>Logout</button>
   )
 }
-
 
 async function fetchActiveTasks(IP) {
     const response = await fetch(`http://${IP}:${ipPort}/getActiveTasks`, {
@@ -48,9 +46,7 @@ async function fetchActiveHistory(IP) {
       return response.json();
 }
 
-
 function UpdatebBtn({item, refetchTasks, refetchTasksHistory}){
-  
   const { status, error, mutate } = useMutation({
     mutationFn: ({id,user, updatedTask_to, updatedTask_finaltimedate, updatedTask_comment}) => {
       return fetch(`http://${IP}:${ipPort}/updateTask`, {
@@ -83,9 +79,6 @@ function UpdatebBtn({item, refetchTasks, refetchTasksHistory}){
       text: "Failed to change task",
       }),
   });
-
-
-
     const updateBtn = () => {
         Swal.fire({
             width: 1000,
@@ -96,7 +89,6 @@ function UpdatebBtn({item, refetchTasks, refetchTasksHistory}){
                 <label for="requester" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Requester: </label>
                 <input id="requester" type="text" value="${item.task_requester}" class="swal2-input" style="background-color: rgb(226 232 240)" readonly>
               </div>
-
               <div style="display: flex; align-items: center;">
               <label for="taskTo" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Task To: </label>
               <select name="taskTo" id="taskTo" class="swal2-select" required>
@@ -106,38 +98,30 @@ function UpdatebBtn({item, refetchTasks, refetchTasksHistory}){
                 ))}
               </select>
             </div>
-
               <div style="display: flex; align-items: center;">
                 <label for="task_description" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Description: </label>
                 <textarea id="task_description" class="swal2-textarea" style="width:600px; background-color: rgb(226 232 240)" readonly>${item.task_description}</textarea>
               </div>
-
               <div style="display: flex; align-items: center;">
                 <label for="date" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Date: </label>
                 <input type="date" value="${format(new Date(item.task_finaltimedate), 'yyyy-MM-dd')}" id="date" class="swal2-date">
-
                 <label for="time" style="display: inline-block; margin-right: 10px; margin-left: 10px; font-size: 24px; text-decoration: underline;">Time: </label>
                 <input type="time" value="${format(new Date(item.task_finaltimedate), 'HH:mm')}" id="time" class="swal2-time">
-
               </div>
-          
               <div style="display: flex; align-items: center;">
                 <label for="task_comment" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Comment: </label>
                 <textarea id="task_comment" class="swal2-textarea" style="width:600px">${item.task_comment}</textarea>
               </div>
-          
               <div style="display: flex; align-items: center;">
                 <label for="task_filelink" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">File Link: </label>
                 <textarea id="task_filelink" class="swal2-textarea" style="width:600px; background-color: rgb(226 232 240)" readonly>${item.task_filelink}</textarea>
               </div>
-          
               <div style="display: flex; align-items: center;">
                 <label for="task_email" style="display: inline-block; margin-right: 10px; font-size: 24px; text-decoration: underline;">Email: </label>
                 <textarea id="task_email" class="swal2-textarea" style="width:600px; background-color: rgb(226 232 240)" readonly>${item.task_email}</textarea>
               </div>
             </div>  
             `,
-           
          showCancelButton: true,
          confirmButtonText: "Confirm",
          cancelButtonText: "Cancel",      
@@ -148,13 +132,9 @@ function UpdatebBtn({item, refetchTasks, refetchTasksHistory}){
             let time = document.getElementById('time').value
             let date = document.getElementById('date').value
             let updatedTask_finaltimedate =  format(new Date(date + ' ' + time), 'yyyy-MM-dd HH:mm:ss')
-
             let updatedTask_comment = document.getElementById('task_comment').value;
             await mutate({id, user, updatedTask_to, updatedTask_finaltimedate, updatedTask_comment});
-
          },
-
-
   });
      };
     return(
@@ -163,7 +143,6 @@ function UpdatebBtn({item, refetchTasks, refetchTasksHistory}){
 }
 
 function FinishBtn({item, refetchTasks}){
-  
   const { status, error, mutate } = useMutation({
     mutationFn: ({id, user}) => {
       return fetch(`http://${IP}:${ipPort}/finishTask`, {
@@ -192,15 +171,12 @@ function FinishBtn({item, refetchTasks}){
       text: "Failed to finish task",
       }),
   });
-
   const finishBtn = () => {
     Swal.fire({
       width: 800,
       title: `Do you really want to finish task: ${item.task_id}`,
       html: ` 
-
-      `,
-     
+      `,   
    showCancelButton: true,
    confirmButtonText: "Confirm",
    cancelButtonText: "Cancel",      
@@ -208,19 +184,14 @@ function FinishBtn({item, refetchTasks}){
       let user = sessionStorage.getItem('user_name')
       let id = item.task_id
       await mutate({id, user});
-
    },
-
-
 });
 };
+    
   return(
     <button className="button-28" onClick={() => finishBtn(item.task_id)}>finish</button>
-) 
+    ) 
 }
-
-
-
 
 
 function ShiftLeaders() {
@@ -237,7 +208,6 @@ function ShiftLeaders() {
         }
       }, []);
 
-
     useEffect(() => {
       if (socket) {
           // refetch from outside update
@@ -248,7 +218,6 @@ function ShiftLeaders() {
               });
       }
     }, [socket]);
-
 
     function removeFilter(value) {
         setFilter(filter.filter(val => val !== value));
@@ -265,13 +234,11 @@ function ShiftLeaders() {
     };
 
 
-
   if (taskLoadingStatus || taskHistoryLoadingStatus) {
     return <span>Loading...</span>
     }
   return (
         <div>
-
           <div className="flex flex-row justify-evenly h-auto p-8 my-0 w-full mt-0 bg-gradient-to-r from-gray-700 to-gray-500 ">
             <div></div>
             <div>
@@ -281,7 +248,6 @@ function ShiftLeaders() {
                 <Logout />
             </div>
           </div>
-    
           <div className="bg-white w-full h-full flex flex-col items-center">
             <div className="bg-white mt-5 pt-5 pb-20 pr-5 w-11/12 rounded-3xl">
               <div className="pt-5 pb-5">
@@ -354,11 +320,9 @@ function ShiftLeaders() {
                                 <td className="p-2 border-b border-slate-300 max-w-150px truncate"><a href={`mailto:${item.task_email}
                             ?subject=${encodeURIComponent(item.task_description)}&body=${encodeURIComponent(`This is automatically generated email by scm Webasto Liberec:\nRequester: ${item.task_requester}\nTask To: ${item.task_to}\nDescription: ${item.task_description}
                             `)}`}>{item.task_email}</a></td>
-            
                                 <td className="px-2 py-2"><UpdatebBtn item={item} refetchTasks={refetchTasks} refetchTasksHistory={refetchTasksHistory} /></td>
                                 <td className="px-2"><FinishBtn item={item} refetchTasks={refetchTasks} /></td>
                             </tr>
-                             
                              {expandedTasks.includes(item.task_id) && (
                               <tr>
                                 <td colSpan="10">
@@ -369,7 +333,6 @@ function ShiftLeaders() {
                                           <th colSpan="3 py-4">History tasks for: {item.task_id}</th>
                                         </tr>
                                         <tr>
-                                          
                                           <th className="p-2">Change made</th>
                                           <th className="p-2">Requester</th>
                                           <th className="p-2">By</th>
@@ -379,7 +342,6 @@ function ShiftLeaders() {
                                           <th className="p-2">Comment</th>
                                           <th className="p-2">File Link</th>
                                           <th className="p-2">Email</th>
-                                        
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -391,7 +353,6 @@ function ShiftLeaders() {
                                           .map((historyTask) => {
                                             return (
                                               <tr key={historyTask.history_id}>
-                                                
                                                 <td className="p-2  pl-5 border-b border-slate-300 w-32 text-center">{format(new Date(historyTask.history_date_time), 'd. M. HH:mm')}</td>
                                                 <td className="p-2 border-b border-slate-300 text-center">{historyTask.task_requester}</td>
                                                 <td className="p-2 border-b border-slate-300 text-center">{historyTask.history_user_id}</td>
@@ -413,7 +374,6 @@ function ShiftLeaders() {
                           </React.Fragment>
                         );
                       })
-
                         // ALL DATA
                     : tasks.map((item) => {
                         return(                  
@@ -426,22 +386,20 @@ function ShiftLeaders() {
                             <td className="p-2 border-b border-slate-300 max-w-250px">{item.task_comment}</td>
                             <td className="p-2 border-b border-slate-300 max-w-250px">{item.task_filelink}</td>
                             <td className="p-2 border-b border-slate-300 max-w-150px">{item.task_email}</td>
-        
                             <td className="px-6 py-3"><UpdatebBtn item={item} /></td>
                             <td className="px-6 py-3"><button className="button-28">finish</button></td>
                         </tr>
                         )})     
                     }
-                    
                     { // filter is but no data
                     filter.length > 0 && 
                         !tasks.some(task => {
                         return filter.includes(task.task_to) 
                         }) && 
                         <tr className={` border-b  hover:bg-slate-200`}>
-                                <td className="px-3 py-3 text-center" colSpan="10">no data found</td>
-                            </tr>
-                    }
+                            <td className="px-3 py-3 text-center" colSpan="10">no data found</td>
+                        </tr>
+                        }
                     </tbody>
                   </table>
                 </div>              
@@ -451,6 +409,5 @@ function ShiftLeaders() {
       );
     }
     
-    
-
+   
     export default ShiftLeaders;
