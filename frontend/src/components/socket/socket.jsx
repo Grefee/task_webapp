@@ -1,11 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-
 const IP = process.env.REACT_APP_IP_ADD;
 const ipPort = process.env.REACT_APP_IP_PORT;
-
-
 
 const SocketContext = createContext();
 
