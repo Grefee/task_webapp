@@ -21,9 +21,6 @@ const ipPort = process.env.REACT_APP_IP_PORT;
 const filterArray = variables.filter
 
 
-
-
-
 async function getAllUsers(IP){
     const response = await fetch(`http://${IP}:${ipPort}/getAllUsers`, {
         method: 'GET',
@@ -32,7 +29,6 @@ async function getAllUsers(IP){
 }
 
 function Deactivatebtn({user, refetchUsers}){
-    
     const { status, error, mutate } = useMutation({
       mutationFn: (id) => {
         console.log(id)
@@ -41,7 +37,6 @@ function Deactivatebtn({user, refetchUsers}){
           headers: {
             "Content-Type": "application/json",
           },
-          
           body: JSON.stringify({
             "user_id": id
           }),
@@ -62,31 +57,26 @@ function Deactivatebtn({user, refetchUsers}){
         text: "Failed to deactivate user",
         }),
     });
-  
     const deactivateBtn = () => {
       Swal.fire({
         width: 800,
         title: `Do you really want to deactivate user: ${user.user_name}`,
         html: ` 
-  
         `,
-       
      showCancelButton: true,
      confirmButtonText: "Confirm",
      cancelButtonText: "Cancel",      
      preConfirm: async () => {
-  
         await mutate(user.user_id);
-  
      },
-  
-  
   });
   };
     return(
       <button className="button-28 max-w-fit" onClick={() => deactivateBtn(user.user_id)}>Deactivate</button>
   ) 
 }
+
+
 function Resetbtn({user}) {
     const { status, error, mutate } = useMutation({
         mutationFn: ({id, newPass}) => {
@@ -137,7 +127,6 @@ const resetBtn = (user) => {
                 <input id="confirmPassword" type="password" value="" class="swal2-input" style="background-color: rgb(226 232 240)">
             </div>
         </div>
-
             `,
         showCancelButton: true,
         confirmButtonText: 'Save Password',
@@ -166,7 +155,6 @@ const resetBtn = (user) => {
                 });
               }
               else {
-            
             await mutate({id, newPass});
             }
         },  
@@ -174,8 +162,10 @@ const resetBtn = (user) => {
 };
   return(
     <button className="button-28 max-w-fit" onClick={() => resetBtn(user)}>Reset pw</button>
-) 
+    ) 
 }
+
+
 function Createbtn({refetchUsers}) {
     const { status, error, mutate } = useMutation({
         mutationFn: ({htmlUsername, htmlPassword, htmlAccType}) => {
@@ -214,7 +204,6 @@ function Createbtn({refetchUsers}) {
         let htmlUsername = document.getElementById("username").value;
         let htmlPassword = document.getElementById("password").value;
         let htmlAccType = document.getElementById("userType").value;
-
         if (htmlUsername.trim() !== '' && htmlPassword.trim() !== '' &&  htmlAccType.trim() !== '') {
             console.log('passed');
             mutate({htmlUsername, htmlPassword, htmlAccType});
@@ -233,12 +222,11 @@ function Createbtn({refetchUsers}) {
 }
 
 
-
-
 function AdminUsers() {
     const socket = useSocket();
     const {isLoading: usersLoadingStatus, data: users, refetch: refetchUsers} = useQuery({queryKey: ['users'], queryFn: async () => await getAllUsers(IP), initialData: []});
-
+    
+    
     useEffect(() => {
         if (socket) {
             // refetch from outside update
@@ -249,9 +237,9 @@ function AdminUsers() {
         }
       }, [socket]);
 
-      if (usersLoadingStatus) {
-        return <span>Loading...</span>
-        }
+  if (usersLoadingStatus) {
+    return <span>Loading...</span>
+    }
 
     return(
         <div className="bg-white w-full h-full flex flex-col items-center">
@@ -262,9 +250,6 @@ function AdminUsers() {
                 </div>
                     <div className="flex flex-row w-full">    
                         <div className="w-1/2">
-
-
-
                         <div className="flex flex-row w-4/6 mx-3 my-3 rounded-2xl">
                             <div className="flex pr-3 align-middle py-2 justify-start">
                                 <label>Username:</label>
@@ -273,8 +258,6 @@ function AdminUsers() {
                                 <input id="username" type="text" className="bg-white border-2 p-2  shadow-inner border-gray-200 rounded-md"></input>
                             </div>
                         </div>
-
-
                         <div className="flex flex-row w-4/6 mx-3 my-3 rounded-2xl">
                             <div className="flex pr-3 align-middle py-2 justify-start">
                                 <label>Password:</label>
@@ -283,14 +266,10 @@ function AdminUsers() {
                                 <input id="password" type="text" className="bg-white border-2 p-2  shadow-inner border-gray-200 rounded-md"></input>
                             </div>
                         </div>
-                            
-
-
                         <div className="flex flex-row w-4/6 mx-3 my-3  rounded-2xl">
                             <div className="flex pr-3 align-middle py-2 justify-start min-w-fit">
                                 <label>User Type:</label>
                             </div>
-
                             <div className="flex  w-3/4 align-middle justify-start">
                                 <select className="bg-white border-2 p-2  shadow-inner border-gray-200 rounded-md" name="userType"  id="userType" required>
                                     <option key="" value="" disabled defaultValue hidden></option>
@@ -299,22 +278,19 @@ function AdminUsers() {
                                 </select> 
                             </div>
                         </div>
+                    </div>           
+                    <div className="w-1/2 flex items-center justify-center">
+                            <Createbtn refetchUsers={refetchUsers} />
                     </div>
-                
-                        <div className="w-1/2 flex items-center justify-center">
-                                <Createbtn refetchUsers={refetchUsers} />
-                        </div>
-                    </div>
+                </div>
             </div>
         </div>
 
         <div className="bg-white mt-20 pt-20 pl-20 pb-20 pr-20 w-11/12 rounded-3xl">
             <div>
-
                 <div className="pt-5 pb-5">
                     <h1 className="text-2xl font-serif underline underline-offset-4">Seznam uživatelů</h1>
                 </div>
-
                 <div className=" relative border w-full rounded-3xl overflow-hidden">
                     <table className="w-full text-black-500 dark:text-gray-400 overflow-hidden">
                         <thead>
@@ -343,15 +319,10 @@ function AdminUsers() {
                     </table>
                 </div>
             </div>
-            
         </div>
-
     </div>
-
         )
     }
 
 
-
-    
 export default AdminUsers;
